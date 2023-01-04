@@ -413,3 +413,4 @@ FodyWeavers.xsd
 *.vsix
 
 bower_components
+/Wx.Share/Wx.Share/DataBase
