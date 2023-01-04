@@ -1,0 +1,21 @@
+﻿@model Wx.Share.Models.Wx.SharePage
+
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<div>
+    <div id="qrcode"></div>
+</div>
+
+<script src="/js/qrcode.min.js"></script>
+<script>
+var qrcode = new QRCode(document.getElementById("qrcode"), {
+    text: location.href,
+    width: 800,
+    height: 800,
+    colorDark: "#000000",
+    colorLight: "#ffffff",
+    correctLevel: QRCode.CorrectLevel.H
+});
+</script>

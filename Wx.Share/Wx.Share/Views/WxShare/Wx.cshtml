@@ -1,0 +1,39 @@
+﻿@model Wx.Share.Models.Wx.SharePage
+@{
+    ViewData["Title"] = Model.Title;
+}
+
+<img src="/img/wxshare.jpg" width="100%">
+
+<script src="/js/weixin-1.6.0.js"></script>
+<script> 
+    fetch("/api/wx/share/signature?url=" + encodeURIComponent(location.href.split('#')[0])).then(res => res.json()).then(res => {
+        if (res["code"] === 0) {
+            let data = res["data"];
+            let origin = location.origin;
+            wx.config({
+                debug: false,
+                appId: data.appId,
+                timestamp: data.timestamp,
+                nonceStr: data.nonceStr,
+                signature: data.signature,
+                jsApiList: ["updateAppMessageShareData", "updateTimelineShareData"]
+            });
+            wx.ready(function () {
+                wx.updateAppMessageShareData({
+                    title: "@Model.Title",
+                    desc: "@Model.Desc",
+                    link: origin + "/api/wx/share/redirect?url=" + "@Model.Url",
+                    imgUrl: "@Model.ImgUrl",
+                });
+                wx.updateTimelineShareData({
+                    title: "@Model.Title",
+                    desc: "@Model.Desc",
+                    link: origin + "/api/wx/share/redirect?url=" + "@Model.Url",
+                    imgUrl: "@Model.ImgUrl",
+                })
+            });
+        }
+    })
+
+</script>
