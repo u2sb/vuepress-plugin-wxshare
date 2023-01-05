@@ -41,7 +41,8 @@ public class WxShareController : ControllerBase
         if (!string.IsNullOrEmpty(url))
         {
             var uri = new Uri(url);
-            if (_appSettings.WhiteListDomains.Any(a => a == uri.Host)) return Redirect(url);
+            if (_appSettings.WhiteListDomains.Any(a => a == uri.Host))
+                return Redirect(uri.AbsoluteUri);
         }
 
         return NotFound();
