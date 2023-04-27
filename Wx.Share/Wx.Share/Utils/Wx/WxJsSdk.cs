@@ -41,7 +41,7 @@ public class WxJsSdk
     /// <returns></returns>
     public async Task<SignPackage?> GetSignPackageAsync(string url)
     {
-        return await _caching.GetAsync($"sp{url}", async () => await SignPackageAsync(url), TimeSpan.FromSeconds(1000));
+        return await _caching.GetAsync($"sp{url}", async () => await SignPackageAsync(url), TimeSpan.FromMinutes(5));
     }
 
     /// <summary>

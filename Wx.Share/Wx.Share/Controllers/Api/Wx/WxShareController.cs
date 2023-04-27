@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using System.Text.RegularExpressions;
+using Microsoft.AspNetCore.Mvc;
 using Wx.Share.Models.Settings;
 using Wx.Share.Models.WebResult;
 using Wx.Share.Models.Wx;
@@ -25,7 +26,7 @@ public class WxShareController : ControllerBase
         if (!string.IsNullOrEmpty(url))
         {
             var uri = new Uri(url);
-            if (_appSettings.WhiteListDomains.Any(a => a == uri.Host))
+            if (_appSettings.WhiteListDomains.Any(a => Regex.IsMatch(uri.Host, a)))
             {
                 var a = await _wxSdk.GetSignPackageAsync(url);
                 if (a != null) return new WebResult<SignPackage?>(a);
@@ -41,7 +42,7 @@ public class WxShareController : ControllerBase
         if (!string.IsNullOrEmpty(url))
         {
             var uri = new Uri(url);
-            if (_appSettings.WhiteListDomains.Any(a => a == uri.Host))
+            if (_appSettings.WhiteListDomains.Any(a => Regex.IsMatch(uri.Host, a)))
                 return Redirect(uri.AbsoluteUri);
         }
 

@@ -53,7 +53,7 @@ public class Startup
         services.AddCors(options =>
         {
             options.AddDefaultPolicy(b => b
-                // .SetIsOriginAllowedToAllowWildcardSubdomains()
+                .SetIsOriginAllowedToAllowWildcardSubdomains()
                 .WithOrigins(_appSettings.WithOrigins.ToArray())
                 .WithMethods("GET", "POST", "OPTIONS")
                 .AllowAnyHeader()
