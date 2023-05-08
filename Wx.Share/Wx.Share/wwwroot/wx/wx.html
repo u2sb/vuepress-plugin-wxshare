@@ -1,67 +1,127 @@
 <!DOCTYPE html>
 
 <html>
-  <head>
-    <meta charset="utf-8" />
-    <title>微信分享插件</title>
-  </head>
-  <body>
-    <img src="/img/wxshare.jpg" width="100%" />
 
-    <script src="/js/weixin-1.6.0.js"></script>
-    <script>
-      const u = new URL(location.href);
-      const origin = u.origin;
-      const id = u.searchParams.get("id");
-      const url = origin + "/api/wx/redirect/" + id;
+<head>
+  <meta charset="utf-8" />
+  <title>微信分享插件</title>
 
-      fetch("/api/wx/page/get/" + id)
-        .then((res) => res.json())
-        .then((res) => {
-          if (res["code"] === 0) {
-            const page = res["data"];
-            fetch("/api/wx/signature", {
-              method: "POST",
-              headers: {
-                "Content-Type": "application/json",
-              },
-              body: JSON.stringify({
-                url: location.href.split("#")[0],
-              }),
-            })
-              .then((res) => res.json())
-              .then((res) => {
-                if (res["code"] === 0) {
-                  const data = res["data"];
-                  wx.config({
-                    debug: false,
-                    appId: data.appId,
-                    timestamp: data.timestamp,
-                    nonceStr: data.nonceStr,
-                    signature: data.signature,
-                    jsApiList: [
-                      "updateAppMessageShareData",
-                      "updateTimelineShareData",
-                    ],
+  <style>
+    body {
+      background-color: #f0f0f0;
+    }
+
+    .card {
+      background-color: #fff;
+      border-radius: 10px;
+      width: 700px;
+      height: 260px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+
+    .card-title {
+      width: 100%;
+      font-size: 48px;
+      margin-bottom: 10px;
+    }
+
+    .card-content {
+      width: 100%;
+      height: 180px;
+      overflow: hidden;
+    }
+
+    .card-desc {
+      margin-right: 40px;
+      float: left;
+      font-size: 32px;
+      line-height: 1.8;
+      width: 480px;
+    }
+
+    .card-img {
+      float: left;
+      width: 160px;
+      height: 160px;
+    }
+  </style>
+</head>
+
+<body>
+  <div>
+    <img src="/img/wxshare.png" width="100%" />
+    <div class="card">
+      <div class="card-title" id="card-title"></div>
+      <div class="card-content">
+        <div class="card-desc" id="card-desc"></div>
+        <div class="card-img" id="card-img"></div>
+      </div>
+    </div>
+  </div>
+
+  <script src="/js/weixin-1.6.0.js"></script>
+  <script>
+    const u = new URL(location.href);
+    const origin = u.origin;
+    const id = u.searchParams.get("id");
+    const url = origin + "/api/wx/redirect/" + id;
+
+    fetch("/api/wx/page/get/" + id)
+      .then((res) => res.json())
+      .then((res) => {
+        if (res["code"] === 0) {
+          const page = res["data"];
+          document.title = "微信分享插件 - " + page.title || "";
+          document.getElementById("card-title").innerHTML = page.title || "";
+          document.getElementById("card-desc").innerHTML = `<a>${page.desc || ""
+            }</a>`;
+          document.getElementById("card-img").innerHTML = `<img src="${page.imgUrl || ""
+            }" width="100%" height="100%" />`;
+
+          fetch("/api/wx/signature", {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              url: location.href.split("#")[0],
+            }),
+          })
+            .then((res) => res.json())
+            .then((res) => {
+              if (res["code"] === 0) {
+                const data = res["data"];
+                wx.config({
+                  debug: false,
+                  appId: data.appId,
+                  timestamp: data.timestamp,
+                  nonceStr: data.nonceStr,
+                  signature: data.signature,
+                  jsApiList: [
+                    "updateAppMessageShareData",
+                    "updateTimelineShareData",
+                  ],
+                });
+                wx.ready(function () {
+                  wx.updateAppMessageShareData({
+                    title: page.title || "",
+                    desc: page.desc || "",
+                    link: url,
+                    imgUrl: page.imgUrl || "",
                   });
-                  wx.ready(function () {
-                    wx.updateAppMessageShareData({
-                      title: page.title || "",
-                      desc: page.desc || "",
-                      link: url,
-                      imgUrl: page.imgUrl || "",
-                    });
-                    wx.updateTimelineShareData({
-                      title: page.title || "",
-                      desc: page.desc || "",
-                      link: url,
-                      imgUrl: page.imgUrl || "",
-                    });
+                  wx.updateTimelineShareData({
+                    title: page.title || "",
+                    desc: page.desc || "",
+                    link: url,
+                    imgUrl: page.imgUrl || "",
                   });
-                }
-              });
-          }
-        });
-    </script>
-  </body>
+                });
+              }
+            });
+        }
+      });
+  </script>
+</body>
+
 </html>
