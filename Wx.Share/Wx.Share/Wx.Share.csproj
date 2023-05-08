@@ -7,12 +7,14 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <PackageReference Include="EasyCaching.LiteDB" Version="1.8.0" />
-    <PackageReference Include="FluentScheduler" Version="5.5.1" />
-    <PackageReference Include="LiteDB" Version="5.0.15" />
-    <PackageReference Include="LiteDB.Async" Version="0.1.2" />
+    <PackageReference Include="LiteDB" Version="5.0.16" />
+    <PackageReference Include="LiteDB.Async" Version="0.1.6" />
     <PackageReference Include="RandomDataGenerator.Net" Version="1.0.17" />
-    <PackageReference Include="RestSharp" Version="108.0.3" />
+    <PackageReference Include="RestSharp" Version="110.2.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Folder Include="wwwroot\wx\" />
   </ItemGroup>
 
 </Project>

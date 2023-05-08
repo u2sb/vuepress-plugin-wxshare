@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <title>微信分享插件</title>
+  </head>
+  <body>
+    <img src="/img/wxshare.jpg" width="100%" />
+
+    <script src="/js/weixin-1.6.0.js"></script>
+    <script>
+      const u = new URL(location.href);
+      const origin = u.origin;
+      const id = u.searchParams.get("id");
+      const url = origin + "/api/wx/redirect/" + id;
+
+      fetch("/api/wx/page/get/" + id)
+        .then((res) => res.json())
+        .then((res) => {
+          if (res["code"] === 0) {
+            const page = res["data"];
+            fetch("/api/wx/signature", {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                url: location.href.split("#")[0],
+              }),
+            })
+              .then((res) => res.json())
+              .then((res) => {
+                if (res["code"] === 0) {
+                  const data = res["data"];
+                  wx.config({
+                    debug: false,
+                    appId: data.appId,
+                    timestamp: data.timestamp,
+                    nonceStr: data.nonceStr,
+                    signature: data.signature,
+                    jsApiList: [
+                      "updateAppMessageShareData",
+                      "updateTimelineShareData",
+                    ],
+                  });
+                  wx.ready(function () {
+                    wx.updateAppMessageShareData({
+                      title: page.title || "",
+                      desc: page.desc || "",
+                      link: url,
+                      imgUrl: page.imgUrl || "",
+                    });
+                    wx.updateTimelineShareData({
+                      title: page.title || "",
+                      desc: page.desc || "",
+                      link: url,
+                      imgUrl: page.imgUrl || "",
+                    });
+                  });
+                }
+              });
+          }
+        });
+    </script>
+  </body>
+</html>
