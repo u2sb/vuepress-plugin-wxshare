@@ -1,3 +1,4 @@
+using System.Diagnostics;
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
@@ -124,6 +125,16 @@ public class Program
     var life = s.GetRequiredService<IHostApplicationLifetime>();
     var cachingDb = s.GetRequiredService<CachingDbContext>();
     var mainDb = s.GetRequiredService<MainDbContext>();
+
+    life.ApplicationStarted.Register(() =>
+    {
+      // 获取并写入pid文件
+      var pid = Process.GetCurrentProcess().Id;
+      TextWriter pidWriter = new StreamWriter(appSettings.PidFile);
+      pidWriter.Write(pid);
+      pidWriter.Flush();
+      pidWriter.Close();
+    });
 
     life.ApplicationStopped.Register(() =>
     {

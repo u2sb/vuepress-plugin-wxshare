@@ -40,6 +40,11 @@ public class AppSettings
   ///   微信SDK
   /// </summary>
   public WxSdk WxSdk { get; set; } = new();
+
+  /// <summary>
+  ///   PID文件
+  /// </summary>
+  public string PidFile { get; set; } = "./Wx.Share.pid";
 }
 
 /// <summary>
