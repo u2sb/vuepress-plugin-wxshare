@@ -27,7 +27,7 @@ public class Program
       var unixSocket = appSetting?.UnixSocket;
       var port = appSetting?.Port ?? 0;
       if (port > 0)
-        options.ListenAnyIP(port);
+        options.ListenLocalhost(port);
 
       if (!string.IsNullOrWhiteSpace(unixSocket))
         options.ListenUnixSocket(unixSocket);
@@ -121,6 +121,15 @@ public class Program
       );
     }
 
+    var life = s.GetRequiredService<IHostApplicationLifetime>();
+    var cachingDb = s.GetRequiredService<CachingDbContext>();
+    var mainDb = s.GetRequiredService<MainDbContext>();
+
+    life.ApplicationStopped.Register(() =>
+    {
+      cachingDb.Database.Dispose();
+      mainDb.Database.Dispose();
+    });
 
     app.Run();
   }

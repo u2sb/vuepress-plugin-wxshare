@@ -20,5 +20,5 @@ public class MainDbContext
   public ILiteCollectionAsync<SharePageTable> SharePage { get; }
 
 
-  private LiteDatabaseAsync Database { get; }
+  public LiteDatabaseAsync Database { get; }
 }

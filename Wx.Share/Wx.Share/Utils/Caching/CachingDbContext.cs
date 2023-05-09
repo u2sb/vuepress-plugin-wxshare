@@ -24,5 +24,5 @@ public class CachingDbContext
   public ILiteCollectionAsync<StringCachingTable> StringCaching { get; }
   public ILiteCollectionAsync<WxSignPackageCachingTable> WxSignPackageCaching { get; }
 
-  private LiteDatabaseAsync Database { get; }
+  public LiteDatabaseAsync Database { get; }
 }
