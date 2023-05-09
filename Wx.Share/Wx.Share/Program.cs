@@ -1,6 +1,7 @@
 using System.Text.Encodings.Web;
 using System.Text.Json;
 using System.Text.Unicode;
+using FluentScheduler;
 using Microsoft.AspNetCore.HttpOverrides;
 using RestSharp;
 using Wx.Share.Models.Settings;
@@ -89,6 +90,37 @@ public class Program
     app.UseCors();
 
     app.MapControllers();
+
+    var serviceScope = app.Services.CreateScope();
+    var s = serviceScope.ServiceProvider;
+
+    if (!string.IsNullOrWhiteSpace(appSettings.WxSdk.AppId) &&
+        !string.IsNullOrWhiteSpace(appSettings.WxSdk.AppSecret))
+    {
+      var wxJsSdk = s.GetRequiredService<WxJsSdk>();
+
+      JobManager.Initialize();
+      JobManager.AddJob(
+        async () =>
+        {
+          var a = 0;
+          while (!await wxJsSdk.RefreshAccessTokenAsync())
+          {
+            a++;
+            if (a > 3) break;
+          }
+
+          var b = 0;
+          while (!await wxJsSdk.RefreshJsApiTicketAsync())
+          {
+            b++;
+            if (b > 3) break;
+          }
+        },
+        sc => sc.ToRunEvery(6900).Seconds()
+      );
+    }
+
 
     app.Run();
   }

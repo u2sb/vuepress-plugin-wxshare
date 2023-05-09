@@ -92,14 +92,14 @@ public class WxJsSdk
   private async Task<string?> GetAccessTokenFromCachingAsync()
   {
     return await _stringCaching.GetOrSetValueAsync("WxAccessToken", GetAccessTokenAsync,
-      TimeSpan.FromSeconds(3400));
+      TimeSpan.FromSeconds(7000));
   }
 
 
   private async Task<string?> GetJsApiTicketFromCachingAsync()
   {
     return await _stringCaching.GetOrSetValueAsync("WxJsApiTicket", GetJsApiTicketAsync,
-      TimeSpan.FromSeconds(3500));
+      TimeSpan.FromSeconds(7000));
   }
 
   /// <summary>
