@@ -121,7 +121,7 @@ public class Program
       );
     }
 
-    var life = s.GetRequiredService<IHostApplicationLifetime>();
+    var life = app.Lifetime;
     var cachingDb = s.GetRequiredService<CachingDbContext>();
     var mainDb = s.GetRequiredService<MainDbContext>();
 
@@ -129,10 +129,13 @@ public class Program
     {
       // 获取并写入pid文件
       var pid = Process.GetCurrentProcess().Id;
-      TextWriter pidWriter = new StreamWriter(appSettings.PidFile);
-      pidWriter.Write(pid);
-      pidWriter.Flush();
-      pidWriter.Close();
+      File.WriteAllText(appSettings.PidFile, pid.ToString());
+    });
+
+    life.ApplicationStopping.Register(() =>
+    {
+      cachingDb.Database.Dispose();
+      mainDb.Database.Dispose();
     });
 
     life.ApplicationStopped.Register(() =>
@@ -141,9 +144,6 @@ public class Program
       if (File.Exists(appSettings.PidFile)) File.Delete(appSettings.PidFile);
       if (!string.IsNullOrWhiteSpace(appSettings.UnixSocket) & File.Exists(appSettings.UnixSocket))
         File.Delete(appSettings.UnixSocket);
-
-      cachingDb.Database.Dispose();
-      mainDb.Database.Dispose();
     });
 
     app.Run();
