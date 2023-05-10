@@ -24,9 +24,8 @@ public class Program
     // 运行配置
     builder.WebHost.ConfigureKestrel((b, options) =>
     {
-      var appSetting = b.Configuration.Get<AppSettings>();
-      var unixSocket = appSetting?.UnixSocket;
-      var port = appSetting?.Port ?? 0;
+      var unixSocket = appSettings?.UnixSocket;
+      var port = appSettings?.Port ?? 0;
       if (port > 0)
         options.ListenLocalhost(port);
 
@@ -138,6 +137,11 @@ public class Program
 
     life.ApplicationStopped.Register(() =>
     {
+      // 删除文件
+      if (File.Exists(appSettings.PidFile)) File.Delete(appSettings.PidFile);
+      if (!string.IsNullOrWhiteSpace(appSettings.UnixSocket) & File.Exists(appSettings.UnixSocket))
+        File.Delete(appSettings.UnixSocket);
+
       cachingDb.Database.Dispose();
       mainDb.Database.Dispose();
     });
