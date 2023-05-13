@@ -1,0 +1,42 @@
+{
+  "name": "vuepress-plugin-wxshare",
+  "version": "0.0.1",
+  "description": "A vuepress plugin that can share content in WeChat",
+  "type": "module",
+  "main": "index.js",
+  "scripts": {
+    "build": "gulp build"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/u2sb/vuepress-plugin-wxshare.git"
+  },
+  "keywords": [
+    "Vuepress",
+    "vuepress-plugin",
+    "Wx",
+    "WeChat"
+  ],
+  "author": "MonoLogueChi",
+  "license": "Apache-2.0",
+  "bugs": {
+    "url": "https://github.com/u2sb/vuepress-plugin-wxshare/issues"
+  },
+  "homepage": "https://github.com/u2sb/vuepress-plugin-wxshare",
+  "dependencies": {
+    "wechat-jssdk": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/web-bluetooth": "^0.0.17",
+    "@vuepress/client": "2.0.0-beta.62",
+    "@vuepress/core": "2.0.0-beta.62",
+    "@vuepress/utils": "2.0.0-beta.62",
+    "execa": "^7.1.1",
+    "gulp": "^4.0.2",
+    "gulp-json-editor": "^2.5.6",
+    "gulp-typescript": "6.0.0-alpha.1",
+    "rimraf": "^5.0.0",
+    "typescript": "5.1.0-dev.20230512",
+    "vue": "^3.3.1"
+  }
+}

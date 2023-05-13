@@ -415,3 +415,4 @@ FodyWeavers.xsd
 bower_components
 /Wx.Share/Wx.Share/DataBase
 *.pid
+dist
