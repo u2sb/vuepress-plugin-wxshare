@@ -51,7 +51,7 @@
 <body>
   <div>
     <img src="/img/wxshare.png" width="100%" />
-    <div class="card">
+    <div class="card" id="card">
       <div class="card-title" id="card-title"></div>
       <div class="card-content">
         <div class="card-desc" id="card-desc"></div>
@@ -78,6 +78,9 @@
             }</a>`;
           document.getElementById("card-img").innerHTML = `<img src="${page.imgUrl || ""
             }" width="100%" height="100%" />`;
+          document.getElementById("card").onclick = () => {
+            location.href = origin + "/api/wx/redirect/" + id;
+          };
 
           fetch("/api/wx/signature", {
             method: "POST",
