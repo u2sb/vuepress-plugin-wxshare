@@ -8,9 +8,31 @@
 
 ## 前端
 
-待开发。。。
+前端项目仅适用于 vuepress 2.x
 
-提供临时使用方法
+### 安装
+
+```bash
+pnpm add vuepress-plugin-wxshare
+```
+
+### 使用
+
+```js
+import wxshare from "vuepress-plugin-wxshare";
+
+export default {
+  plugins: [
+    wxshare({
+      host: "https://www.u2sb.com",
+      server: "",
+      imgUrl: "https://www.u2sb.com/assets/img/avatar.jpg",
+      desc: "帅比网",
+      directConnection: false,
+    }),
+  ],
+};
+```
 
 ## 后端
 

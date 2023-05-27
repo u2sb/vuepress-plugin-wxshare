@@ -6,7 +6,7 @@ import { share as wxShare } from "../utils/wx.js";
 
 import type { VNode } from "vue";
 
-import "../style/wxShare.scss";
+import "../style/wxshare.scss";
 
 // @ts-ignore
 const wspo = WX_SHARE_PLUGIN_OPTIONS as WxSharePluginOptions;
@@ -15,7 +15,6 @@ export default defineComponent({
   setup() {
     const pageData = usePageData();
     const siteData = useSiteData();
-    const frontmatter = pageData.value.frontmatter;
 
     const needIcon = ref(false);
     const updateMobile = (): void => {
@@ -32,10 +31,12 @@ export default defineComponent({
     const setData = () => {
       url.value = wspo.host + pageData.value.path;
       title.value =
-        frontmatter.title || pageData.value.title || siteData.value.title;
+        pageData.value.frontmatter.title ||
+        pageData.value.title ||
+        siteData.value.title;
       desc.value =
-        (frontmatter.wxdescription as string) ||
-        frontmatter.description?.substring(0, 60) ||
+        (pageData.value.frontmatter.wxdescription as string) ||
+        pageData.value.frontmatter.description?.substring(0, 60) ||
         wspo.desc ||
         siteData.value.description;
     };
