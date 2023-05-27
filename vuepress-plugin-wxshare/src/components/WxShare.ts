@@ -1,12 +1,8 @@
 import { defineComponent, h, onMounted, ref, watch } from "vue";
-import {
-  usePageFrontmatter,
-  usePageHeadTitle,
-  usePageData,
-  useSiteData,
-} from "@vuepress/client";
-import { WxSharePluginOptions } from "../options.js";
+import { usePageData, useSiteData } from "@vuepress/client";
+import type { WxSharePluginOptions } from "../options.js";
 import { checkIsMobile, checkIsWeChat } from "../utils/utils.js";
+import { share as wxShare } from "../utils/wx.js";
 
 import type { VNode } from "vue";
 
@@ -19,12 +15,7 @@ export default defineComponent({
   setup() {
     const pageData = usePageData();
     const siteData = useSiteData();
-    const frontmatter = usePageFrontmatter<{
-      title?: string;
-      wxdescription?: string;
-      description?: string;
-    }>();
-    const pageHeadTitle = usePageHeadTitle();
+    const frontmatter = pageData.value.frontmatter;
 
     const needIcon = ref(false);
     const updateMobile = (): void => {
@@ -41,10 +32,10 @@ export default defineComponent({
     const setData = () => {
       url.value = wspo.host + pageData.value.path;
       title.value =
-        frontmatter.value.title || pageHeadTitle.value || siteData.value.title;
+        frontmatter.title || pageData.value.title || siteData.value.title;
       desc.value =
-        frontmatter.value.wxdescription ||
-        frontmatter.value.description?.substring(0, 60) ||
+        (frontmatter.wxdescription as string) ||
+        frontmatter.description?.substring(0, 60) ||
         wspo.desc ||
         siteData.value.description;
     };
@@ -76,51 +67,13 @@ export default defineComponent({
 
     const shareWx = () => {
       if (wspo.directConnection === true) {
-        if (/MicroMessenger/i.test(navigator.userAgent.toLowerCase())) {
-          fetch(wspo.server + "/api/wx/signature", {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json;charset=UTF-8",
-            },
-            body: JSON.stringify({
-              url: location.href.split("#")[0],
-            }),
-          })
-            .then((res) => res.json())
-            .then((res) => {
-              if (res["code"] === 0) {
-                const data = res["data"];
-                const config = {
-                  debug: false,
-                  appId: data.appId,
-                  timestamp: data.timestamp,
-                  nonceStr: data.nonceStr,
-                  signature: data.signature,
-                  jsApiList: [
-                    "updateAppMessageShareData",
-                    "updateTimelineShareData",
-                  ],
-                };
-                //@ts-ignore
-                import("wechat-jssdk").then(({ default: WechatJSSDK }) => {
-                  const wechatObj = new WechatJSSDK(config);
-                  wechatObj.initialize().then((w: any) => {
-                    w.callWechatApi("updateAppMessageShareData", {
-                      title: title.value,
-                      desc: desc.value,
-                      link: url.value,
-                      imgUrl: imgUrl,
-                    });
-                    w.callWechatApi("updateTimelineShareData", {
-                      title: title.value,
-                      desc: desc.value,
-                      link: url.value,
-                      imgUrl: imgUrl,
-                    });
-                  });
-                });
-              }
-            });
+        if (checkIsWeChat(navigator.userAgent)) {
+          wxShare(wspo, {
+            title: title.value,
+            desc: desc.value,
+            url: url.value,
+            imgUrl: imgUrl || "",
+          });
         }
       }
     };

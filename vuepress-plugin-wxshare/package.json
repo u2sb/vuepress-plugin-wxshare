@@ -23,9 +23,6 @@
     "url": "https://github.com/u2sb/vuepress-plugin-wxshare/issues"
   },
   "homepage": "https://github.com/u2sb/vuepress-plugin-wxshare",
-  "dependencies": {
-    "wechat-jssdk": "^5.1.0"
-  },
   "devDependencies": {
     "@types/web-bluetooth": "^0.0.17",
     "@vuepress/client": "2.0.0-beta.62",
@@ -35,8 +32,8 @@
     "gulp": "^4.0.2",
     "gulp-json-editor": "^2.5.6",
     "gulp-typescript": "6.0.0-alpha.1",
-    "rimraf": "^5.0.0",
-    "typescript": "5.1.0-dev.20230512",
+    "rimraf": "^5.0.1",
+    "typescript": "5.2.0-dev.20230526",
     "vue": "^3.3.1"
   }
 }

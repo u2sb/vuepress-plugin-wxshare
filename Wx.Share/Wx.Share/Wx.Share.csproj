@@ -15,7 +15,6 @@
   </ItemGroup>
 
   <ItemGroup>
-    <Folder Include="wwwroot\wx\" />
+    <Folder Include="wwwroot\lib\wtto00\jweixin-esm\lib\" />
   </ItemGroup>
-
 </Project>

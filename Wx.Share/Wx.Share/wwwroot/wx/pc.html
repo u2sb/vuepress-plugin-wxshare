@@ -1,5 +1,4 @@
 <!DOCTYPE html>
-
 <html>
 
 <head>
@@ -11,7 +10,7 @@
   <div style="align-items: center; display: flex; justify-content: center">
     <div style="margin: 100px auto 0">
       <div id="qrcode"></div>
-      <div style="margin: 20px auto 0; text-align: center; font-size: 20px">
+      <div style="margin: 20px auto 0; text-align: center; font-size: 22px">
         <div>
           <text>扫描上方二维码分享给微信好友</text>
         </div>
@@ -22,8 +21,8 @@
     </div>
   </div>
 
-  <script src="/js/qrcode.min.js"></script>
-  <script>
+  <script type="module">
+    import qrcode from "/js/qrcode-generator.esm.js"
     var u = new URL(location.href);
     var origin = u.origin;
     var id = u.searchParams.get("id");
@@ -33,14 +32,10 @@
       location.href = origin + "/api/wx/redirect/" + id;
     };
 
-    var qrcode = new QRCode(document.getElementById("qrcode"), {
-      text: url,
-      width: 300,
-      height: 300,
-      colorDark: "#000000",
-      colorLight: "#ffffff",
-      correctLevel: QRCode.CorrectLevel.H,
-    });
+    var qr = qrcode(0, "H");
+    qr.addData(url);
+    qr.make();
+    document.getElementById("qrcode").innerHTML = qr.createSvgTag(8);
   </script>
 </body>
 

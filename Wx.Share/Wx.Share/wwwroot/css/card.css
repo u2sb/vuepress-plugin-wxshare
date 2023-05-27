@@ -1,0 +1,34 @@
+.card {
+  background-color: #fff;
+  border-radius: 10px;
+  width: 700px;
+  height: 260px;
+  margin: 0 auto;
+  padding: 20px;
+}
+
+.card-title {
+  width: 100%;
+  font-size: 48px;
+  margin-bottom: 10px;
+}
+
+.card-content {
+  width: 100%;
+  height: 180px;
+  overflow: hidden;
+}
+
+.card-desc {
+  margin-right: 40px;
+  float: left;
+  font-size: 32px;
+  line-height: 1.8;
+  width: 480px;
+}
+
+.card-img {
+  float: left;
+  width: 160px;
+  height: 160px;
+}
