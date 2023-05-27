@@ -6,6 +6,11 @@
 
 本项目分为前端和后端。
 
+## 示例
+
+- [帅比网](https://www.u2sb.com)
+- [叉叉白](blog.xxwhite.com)
+
 ## 前端
 
 前端项目仅适用于 vuepress 2.x
@@ -13,7 +18,7 @@
 ### 安装
 
 ```bash
-pnpm add vuepress-plugin-wxshare
+pnpm add -D vuepress-plugin-wxshare
 ```
 
 ### 使用
@@ -36,7 +41,9 @@ export default {
 
 ## 后端
 
-以 Linux 为例，下载并解压后端
+### Linux
+
+下载并解压后端
 
 修改配置文件，详见源码
 
@@ -93,7 +100,7 @@ Description=WxShare
 After=network.target remote-fs.target nss-lookup.target
 
 [Service]
-Type=forking
+Type=exec
 
 User=your_username
 Group=your_groupname
@@ -141,3 +148,11 @@ server {
     }
 }
 ```
+
+### Windows
+
+下载并安装 [ASP.NET Core Runtime 7.0](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)，需要下载 Hosting Bundle 版本，也就是带有 IIS runtime support (ASP.NET Core Module v2) 的版本。
+
+下载预编译版本，并解压在服务器上，在 IIS 创建网站，目录设置为解压的目录。
+
+注意，IIS 上程序内配置 CORS 无效，需使用模块 [IIS CORS Module](https://www.iis.net/downloads/microsoft/iis-cors-module)，详见[文档](https://learn.microsoft.com/en-us/iis/extensions/cors-module/cors-module-configuration-reference)
